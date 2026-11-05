@@ -1,0 +1,52 @@
+{
+  "name": "xbraan1-website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "npm run typecheck && vite build && tsx scripts/postbuild.ts",
+    "preview": "vite preview",
+    "typecheck": "tsc -p tsconfig.json && tsc -p tsconfig.worker.json && tsc -p tsconfig.node.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "validate": "tsx scripts/validate-content.ts",
+    "check:launch": "tsx scripts/launch-check.ts",
+    "dev:worker": "npm run build && wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply xbraan1-submissions --local",
+    "db:migrate:remote": "wrangler d1 migrations apply xbraan1-submissions --remote",
+    "deploy": "npm run build && wrangler deploy"
+  },
+  "dependencies": {
+    "@fontsource-variable/inter": "^5.3.0",
+    "@fontsource-variable/playfair-display": "^5.3.0",
+    "lucide-react": "^0.294.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-helmet-async": "^3.0.0",
+    "react-router-dom": "^7.18.5"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^5.20261101.1",
+    "@eslint/js": "^9.39.5",
+    "@tailwindcss/vite": "^4.1.7",
+    "@types/node": "^26.6.6",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.3.4",
+    "eslint": "^9.39.5",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "tailwindcss": "^4.1.7",
+    "tsx": "^4.23.15",
+    "typescript": "^5.7.0",
+    "typescript-eslint": "^8.72.1",
+    "vite": "^6.4.5",
+    "vitest": "^5.0.5",
+    "wrangler": "^4.156.0"
+  },
+  "version": "1.0.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

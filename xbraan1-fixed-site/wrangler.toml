@@ -1,0 +1,41 @@
+#:schema node_modules/wrangler/config-schema.json
+# xBraan1: static site (dist/) plus a small Worker for the contact and booking forms (/api/*).
+# Deploy with `npm run deploy` (or let Cloudflare Workers Builds run: build `npm run build`, deploy `npx wrangler deploy`).
+name = "xbraan1"
+main = "worker/index.ts"
+compatibility_date = "2025-10-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+# /services/ redirects to /services; real files are served at clean URLs.
+html_handling = "drop-trailing-slash"
+# Unknown URLs get a real 404 status with the app shell (dist/404.html), not a "soft 404".
+not_found_handling = "404-page"
+# Only /api/* runs the Worker; everything else is served straight from the static assets.
+run_worker_first = ["/api/*"]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "xbraan1-submissions"
+database_id = "2d968f05-79d8-4687-82f8-9e7522336e24"
+migrations_dir = "migrations"
+
+# Daily clean-up of submissions older than RETENTION_DAYS.
+[triggers]
+crons = ["17 3 * * *"]
+
+[observability]
+enabled = true
+
+[vars]
+ALLOWED_ORIGINS = "https://xbraan1.co.uk,https://www.xbraan1.co.uk"
+RETENTION_DAYS = "365"
+
+# Optional (see docs/OWNER_TODO.md):
+#   Email notifications - enable Email Routing for the domain, verify the destination address, then add:
+#     [[send_email]]
+#     name = "SEND_EMAIL"
+#     destination_address = "you@example.com"
+#   and set the NOTIFY_TO / NOTIFY_FROM variables.
+#   Turnstile - set TURNSTILE_SECRET_KEY as a secret and put the site key in src/config/site.ts.
